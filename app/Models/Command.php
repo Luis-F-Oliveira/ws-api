@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Command extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'return'
+    ];
+
+    protected $visible = [
+        'id',
+        'name',
+        'return'
+    ];
 }
