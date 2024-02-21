@@ -27,7 +27,7 @@ class AuthController extends Controller
         }
 
         return response()->json([
-            'error' => 'Credenciais invélidas'
+            'error' => 'Credenciais inválidas'
         ], 401);
     }
 

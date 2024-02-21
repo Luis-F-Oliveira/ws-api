@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Sector;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,7 +20,10 @@ class CommandFactory extends Factory
     {
         return [
             'name' => Str::random(10),
-            'return' => Str::random(25)
+            'return' => Str::random(25),
+            'sector_id' => function () {
+                return Sector::pluck('id')->random();
+            }
         ];
     }
 }
