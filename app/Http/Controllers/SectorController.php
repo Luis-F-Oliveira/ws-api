@@ -20,7 +20,15 @@ class SectorController extends Controller
 
     public function store(Request $request)
     {
-        //
+        try {
+            return Sector::create([
+                'name' => $request->input('name')
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 
     public function show($id)

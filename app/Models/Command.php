@@ -12,7 +12,8 @@ class Command extends Model
 
     protected $fillable = [
         'name',
-        'return'
+        'return',
+        'sector_id'
     ];
 
     protected $hidden = [

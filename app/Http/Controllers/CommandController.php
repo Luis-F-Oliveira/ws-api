@@ -25,7 +25,8 @@ class CommandController extends Controller
         try {
             return Command::create([
                 'name' => Str::lower(Str::ascii($request->input('name'))),
-                'return' => $request->input('return')
+                'return' => $request->input('return'),
+                'sector_id' => $request->input('sector')
             ]);
         } catch (Exception $e) {
             return response()->json([
