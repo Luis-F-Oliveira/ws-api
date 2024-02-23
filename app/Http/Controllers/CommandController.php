@@ -38,7 +38,7 @@ class CommandController extends Controller
     public function show($id)
     {
         try {
-            return Command::findOrFail($id);
+            return Command::with('sector')->find($id);
         } catch (Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()
