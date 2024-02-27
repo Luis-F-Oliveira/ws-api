@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,11 +15,13 @@ class Commit extends Model
     protected $fillable = [
         'user_id',
         'command_id',
-        'number_from'
+        'number_from',
+        'answered'
     ];
 
     protected $hidden = [
-        'created_at',
+        'user_id',
+        'command_id',
         'updated_at'
     ];
 
@@ -30,5 +33,10 @@ class Commit extends Model
     public function command()
     {
         return $this->belongsTo(Command::class);
+    }
+    
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->subHours(4)->format('d/m/Y-H:i:s');
     }
 }

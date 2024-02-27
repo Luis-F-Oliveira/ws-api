@@ -54,6 +54,7 @@ class CommandController extends Controller
             if ($command) {
                 $command->name = Str::lower(Str::ascii($request->input('name')));
                 $command->return = $request->input('return');
+                $command->sector_id = $request->input('sector');
 
                 $command->save();
 

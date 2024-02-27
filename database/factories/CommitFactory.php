@@ -25,7 +25,8 @@ class CommitFactory extends Factory
             'command_id' => function () {
                 return Command::pluck('id')->random();
             },
-            'number_from' => '5565999999999'
+            'number_from' => '5565999999999',
+            'answered' => false
         ];
     }
 }
