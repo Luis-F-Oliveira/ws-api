@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Command;
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -25,6 +26,7 @@ class CommitFactory extends Factory
             'command_id' => function () {
                 return Command::pluck('id')->random();
             },
+            'question' => Str::random(100),
             'number_from' => '5565999999999',
             'answered' => false
         ];

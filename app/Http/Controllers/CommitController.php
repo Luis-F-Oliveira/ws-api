@@ -13,7 +13,6 @@ class CommitController extends Controller
     public function index()
     {
         try {
-            // return Commit::with('user', 'command')->get();
             $user = Auth::user();
             
             return Commit::orderBy('id', 'desc')
@@ -37,6 +36,7 @@ class CommitController extends Controller
                 return Commit::create([
                     'user_id' => $user,
                     'command_id' => $command,
+                    'question' => $request->input('question'),
                     'number_from' => $request->input('number'),
                     'answered' => false
                 ]);
@@ -99,6 +99,29 @@ class CommitController extends Controller
             return response()->json([
                 'message' => 'Commit Deleted'
             ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function updateAnswered($id)
+    {
+        try {
+            $commit = Commit::findOrFail($id);
+
+            if (!$commit->answered) {
+                $commit->answered = true;
+                $commit->save();
+                return response()->json([
+                    'message' => 'Answered Update Success'
+                ], 200);
+            }
+
+            return response()->json([
+                'message' => 'Commit Already Answered'
+            ], 401);
         } catch (Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()

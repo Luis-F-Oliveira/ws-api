@@ -18,8 +18,7 @@ class Command extends Model
 
     protected $hidden = [
         'created_at',
-        'updated_at',
-        'sector_id'
+        'updated_at'
     ];
 
     public function sector()

@@ -16,7 +16,8 @@ class Commit extends Model
         'user_id',
         'command_id',
         'number_from',
-        'answered'
+        'answered',
+        'question'
     ];
 
     protected $hidden = [

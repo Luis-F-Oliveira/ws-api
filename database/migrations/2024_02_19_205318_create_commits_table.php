@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('command_id')->constrained('commands');
+            $table->text('question');
             $table->string('number_from', 32);
             $table->boolean('answered');
             $table->timestamps();
