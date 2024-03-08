@@ -12,7 +12,7 @@ class CommandController extends Controller
     public function index()
     {
         try {
-            return Command::with('sector')->get();
+            return Command::whereNull('parent_id')->with('replies', 'sector')->get();
         } catch (Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()

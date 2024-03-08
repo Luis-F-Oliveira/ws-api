@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('return');
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->foreign('parent_id')->references('id')->on('commands')->onDelete('cascade');
             $table->foreignId('sector_id')->constrained('sectors');
             $table->timestamps();
         });

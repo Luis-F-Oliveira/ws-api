@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\User;
+use App\Models\Access;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -17,11 +18,13 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            $token = Auth::user()->createToken('auth-token')->plainTextToken;
+            $auth = Auth::user();
+            $access = Access::find($auth->access_id);
+
+            $token = Auth::user()->createToken('auth-token', [$access->name])->plainTextToken;
             $cookie = cookie('jwt', $token, 60 * 24);
 
             return response()->json([
-                'token' => $token,
                 'user' => Auth::user()
             ])->withCookie($cookie);
         }

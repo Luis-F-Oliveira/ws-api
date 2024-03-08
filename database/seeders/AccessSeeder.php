@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Command;
+use App\Models\Access;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class CommandSeeder extends Seeder
+class AccessSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Command::factory()->count(1)->create();
+        Access::factory()->count(3)->create();
     }
 }

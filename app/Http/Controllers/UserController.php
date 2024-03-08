@@ -12,7 +12,7 @@ class UserController extends Controller
     public function index()
     {
         try {
-            return User::all();
+            return User::with('access', 'sector')->get();
         } catch (Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()
@@ -23,7 +23,7 @@ class UserController extends Controller
     public function show($id)
     {
         try {
-            return User::findOrFail($id);
+            return User::with('access', 'sector')->find($id);
         } catch (Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()

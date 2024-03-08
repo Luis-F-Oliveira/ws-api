@@ -32,7 +32,7 @@ class CommitController extends Controller
             $user = $request->input('user');
             $command = $request->input('command');
 
-            if (User::find($user) && Command::find($command)) {
+            if (User::find($user)) {
                 return Commit::create([
                     'user_id' => $user,
                     'command_id' => $command,
