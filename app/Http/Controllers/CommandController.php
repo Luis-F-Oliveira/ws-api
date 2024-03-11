@@ -24,9 +24,10 @@ class CommandController extends Controller
     {
         try {
             return Command::create([
-                'name' => Str::lower(Str::ascii($request->input('name'))),
+                'name' => $request->input('name'),
                 'return' => $request->input('return'),
-                'sector_id' => $request->input('sector')
+                'sector_id' => $request->input('sector'),
+                'parent_id' => $request->input('parent')
             ]);
         } catch (Exception $e) {
             return response()->json([
@@ -38,7 +39,13 @@ class CommandController extends Controller
     public function show($id)
     {
         try {
-            return Command::with('sector')->find($id);
+            $command = Command::findOrFail($id);
+
+            if ($command->parent_id === null) {
+                $command = Command::with('replies', 'sector')->find($id);
+            }
+
+            return $command;
         } catch (Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()
@@ -49,12 +56,17 @@ class CommandController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $command = Command::find($id);
+            $command = Command::findOrFail($id);
+
+            if ($command->parent_id === null) {
+                $command = Command::with('replies', 'sector')->find($id);
+            }
 
             if ($command) {
-                $command->name = Str::lower(Str::ascii($request->input('name')));
+                $command->name = $request->input('name');
                 $command->return = $request->input('return');
                 $command->sector_id = $request->input('sector');
+                $command->parent_id = $request->input('parent');
 
                 $command->save();
 
@@ -77,6 +89,14 @@ class CommandController extends Controller
     {
         try {
             $command = Command::findOrFail($id);
+
+            $childCommands = Command::where('parent_id', $id)->exists();
+
+            if ($childCommands) {
+                return response()->json([
+                    'message' => 'Unable to delete command. It is being used as a parent by other commands.'
+                ], 403);
+            }
 
             $command->delete();
 

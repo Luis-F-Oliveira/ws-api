@@ -34,37 +34,19 @@ class CommandFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Command $command) {
-            $this->createCascadingCommands($command, 3);
-        });
-    }
-
-    /**
-     * Create cascading commands.
-     *
-     * @param  \App\Models\Command  $command
-     * @param  int  $levels
-     * @return void
-     */
-    private function createCascadingCommands(Command $command, int $levels)
-    {
-        dump('Level: ' . $levels);
-
-        if ($levels <= 0) {
-            return;
-        }
-    
-        for ($level = 0; $level < $levels; $level++) {
-            dump('Level: ' . $level); // Exibe o valor de $level no console
-    
-            $commandsToCreate = Command::factory(4)->create([
-                'sector_id' => $command->sector_id,
-                'parent_id' => $command->id,
-            ]);
-
-    
-            foreach ($commandsToCreate as $newCommand) {
-                $this->createCascadingCommands($newCommand, $levels - 1);
+            if ($command->id === 1) {
+                Command::factory()->count(4)->create([
+                    'sector_id' => $command->sector_id,
+                    'parent_id' => $command->id,
+                ]);
             }
-        }
+
+            if ($command->parent_id === 1) {
+                Command::factory()->count(4)->create([
+                    'sector_id' => $command->sector_id,
+                    'parent_id' => $command->id,
+                ]);
+            }
+        });
     }
 }
