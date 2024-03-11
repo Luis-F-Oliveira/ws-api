@@ -41,7 +41,8 @@ class AuthController extends Controller
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
-                'sector_id' => $request->input('sector')
+                'access_id' => 2,
+                'sector_id' => $request->input('sector'),
             ]);
         } catch (Exception $e) {
             return response()->json([
