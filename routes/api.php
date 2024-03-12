@@ -21,14 +21,14 @@ use App\Http\Controllers\SectorController;
 */
 
 Route::post('login', [AuthController::class, 'login']);
-Route::post('register', [AuthController::class, 'register']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('register', [AuthController::class, 'register']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::apiResource('users', UserController::class);
     Route::apiResource('commands', CommandController::class);
     Route::apiResource('commits', CommitController::class);
     Route::get('commits/answered/{id}', [CommitController::class, 'updateAnswered']);
-    Route::apiResource('sectors', SectorController::class)->except(['index']);
+    Route::apiResource('sectors', SectorController::class);
     Route::get('charts/sectors', [ChartController::class, 'sectors']);
 });
