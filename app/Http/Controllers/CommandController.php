@@ -6,13 +6,20 @@ use Illuminate\Support\Str;
 use Exception;
 use App\Models\Command;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommandController extends Controller
 {
     public function index()
     {
         try {
-            return Command::whereNull('parent_id')->with('replies', 'sector')->get();
+            $user = Auth::user();
+            $sectorId = $user->sector_id;
+
+            return Command::where('sector_id', $sectorId)
+                ->whereNull('parent_id')
+                ->with('replies', 'sector')
+                ->get();
         } catch (Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()
