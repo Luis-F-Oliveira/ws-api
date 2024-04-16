@@ -16,16 +16,24 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
+        $items = $request->input('items');
 
         if (Auth::attempt($credentials)) {
             $auth = Auth::user();
             $access = Access::find($auth->access_id);
 
             $token = Auth::user()->createToken('auth-token', [$access->name])->plainTextToken;
-            $cookie = cookie('jwt', $token, 60 * 24);
+
+            if ($items && in_array('conect', $items)) {
+                $cookie = cookie('jwt', $token);
+                $permanent = true;
+            } else {
+                $cookie = cookie('jwt', $token, 60 * 24);
+                $permanent = false;
+            }
 
             return response()->json([
-                'user' => Auth::user()
+                'permanent' => $permanent
             ])->withCookie($cookie);
         }
 
