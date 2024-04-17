@@ -33,8 +33,8 @@ class CommandController extends Controller
             return Command::create([
                 'name' => $request->input('name'),
                 'return' => $request->input('return'),
-                'sector_id' => $request->input('sector'),
-                'parent_id' => $request->input('parent')
+                'sector_id' => $request->input('sector_id'),
+                'parent_id' => $request->input('parent_id')
             ]);
         } catch (Exception $e) {
             return response()->json([
@@ -72,13 +72,13 @@ class CommandController extends Controller
             if ($command) {
                 $command->name = $request->input('name');
                 $command->return = $request->input('return');
-                $command->sector_id = $request->input('sector');
-                $command->parent_id = $request->input('parent');
+                $command->sector_id = $request->input('sector_id');
+                $command->parent_id = $request->input('parent_id');
 
                 $command->save();
 
                 return response()->json([
-                    'message' => 'Command Updated'
+                    'message' => 'Comando atualizado!'
                 ], 200);
             }
             
@@ -101,19 +101,17 @@ class CommandController extends Controller
 
             if ($childCommands) {
                 return response()->json([
-                    'message' => 'Unable to delete command. It is being used as a parent by other commands.'
+                    'message' => 'A impossibilidade de excluir o comando. Ele está sendo utilizado como pai por outros comandos.'
                 ], 403);
             }
 
             $command->delete();
 
-            return response()->json([
-                'message' => 'Command Deleted'
-            ], 200);
+            return response(200);
         } catch (Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()
-            ]);
+            ], 500);
         }
     }
 }
