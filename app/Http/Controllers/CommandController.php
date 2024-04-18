@@ -10,13 +10,18 @@ use Illuminate\Support\Facades\Auth;
 
 class CommandController extends Controller
 {
+    private $user;
+
+    public function __construct()
+    {
+        $user = Auth::user();
+        $this->sector = $user->sector_id;
+    }
+
     public function index()
     {
         try {
-            $user = Auth::user();
-            $sectorId = $user->sector_id;
-
-            return Command::where('sector_id', $sectorId)
+            return Command::where('sector_id', $this->sector)
                 ->whereNull('parent_id')
                 ->with('replies', 'sector')
                 ->get();
@@ -33,7 +38,7 @@ class CommandController extends Controller
             return Command::create([
                 'name' => $request->input('name'),
                 'return' => $request->input('return'),
-                'sector_id' => $request->input('sector_id'),
+                'sector_id' => $this->sector,
                 'parent_id' => $request->input('parent_id')
             ]);
         } catch (Exception $e) {
@@ -72,7 +77,7 @@ class CommandController extends Controller
             if ($command) {
                 $command->name = $request->input('name');
                 $command->return = $request->input('return');
-                $command->sector_id = $request->input('sector_id');
+                $command->sector_id = $this->sector;
                 $command->parent_id = $request->input('parent_id');
 
                 $command->save();
