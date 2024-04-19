@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->boolean('is_bot');
             $table->foreignId('access_id')->constrained('accesses');
             $table->foreignId('sector_id')->constrained('sectors');
             $table->timestamps();

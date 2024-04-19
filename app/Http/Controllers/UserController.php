@@ -39,6 +39,7 @@ class UserController extends Controller
             if ($user) {
                 $user->name = $request->input('name');
                 $user->email = $request->input('email');
+                $user->is_bot = $request->input('is_bot');
                 $user->password = Hash::make($request->input('password'));
 
                 $user->save();

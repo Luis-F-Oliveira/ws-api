@@ -22,7 +22,12 @@ class AuthController extends Controller
             $auth = Auth::user();
             $access = Access::find($auth->access_id);
 
-            $token = Auth::user()->createToken('auth-token', [$access->name])->plainTextToken;
+            if ($auth->is_bot) {
+                $token = Auth::user()->createToken('auth-token', ['bot'])->plainTextToken;
+            } else {
+                $token = Auth::user()->createToken('auth-token', [$access->name])->plainTextToken;
+            }
+
 
             if ($items && in_array('conect', $items)) {
                 $cookie = cookie('jwt', $token);
@@ -48,6 +53,7 @@ class AuthController extends Controller
             return User::create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
+                'is_bot' => $request->input('is_bot'),
                 'password' => Hash::make($request->input('password')),
                 'access_id' => 2,
                 'sector_id' => $request->input('sector'),

@@ -29,6 +29,7 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'password' => static::$password ??= Hash::make('12345678'),
+            'is_bot' => false,
             'access_id' => function () {
                 return Access::pluck('id')->random();
             },

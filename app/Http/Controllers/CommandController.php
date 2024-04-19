@@ -16,11 +16,18 @@ class CommandController extends Controller
     {
         $user = Auth::user();
         $this->sector = $user->sector_id;
+        $this->isBot = $user->is_bot;
     }
 
     public function index()
     {
         try {
+            if($this->isBot) {
+                return Command::with('replies', 'sector')
+                    ->whereNull('parent_id')
+                    ->get();
+            }
+
             return Command::where('sector_id', $this->sector)
                 ->whereNull('parent_id')
                 ->with('replies', 'sector')

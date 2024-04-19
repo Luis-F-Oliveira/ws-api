@@ -17,6 +17,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_bot',
         'access_id',
         'sector_id'
     ];
