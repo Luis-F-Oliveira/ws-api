@@ -38,7 +38,8 @@ class AuthController extends Controller
             }
 
             return response()->json([
-                'permanent' => $permanent
+                'permanent' => $permanent,
+                'token' => $token,
             ])->withCookie($cookie);
         }
 
