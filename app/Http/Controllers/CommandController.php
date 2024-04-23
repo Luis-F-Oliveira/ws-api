@@ -10,25 +10,20 @@ use Illuminate\Support\Facades\Auth;
 
 class CommandController extends Controller
 {
-    private $user;
-
-    public function __construct()
-    {
-        $user = Auth::user();
-        $this->sector = $user->sector_id;
-        $this->isBot = $user->is_bot;
-    }
-
     public function index()
     {
+        $user = Auth::user();
+        $sector = $user->sector_id;
+        $isBot = $user->is_bot;
+
         try {
-            if($this->isBot) {
+            if($isBot) {
                 return Command::with('replies', 'sector')
                     ->whereNull('parent_id')
                     ->get();
             }
 
-            return Command::where('sector_id', $this->sector)
+            return Command::where('sector_id', $sector)
                 ->whereNull('parent_id')
                 ->with('replies', 'sector')
                 ->get();
@@ -41,11 +36,15 @@ class CommandController extends Controller
 
     public function store(Request $request)
     {
+        $user = Auth::user();
+        $sector = $user->sector_id;
+        $isBot = $user->is_bot;
+
         try {
             return Command::create([
                 'name' => $request->input('name'),
                 'return' => $request->input('return'),
-                'sector_id' => $this->sector,
+                'sector_id' => $sector,
                 'parent_id' => $request->input('parent_id')
             ]);
         } catch (Exception $e) {
@@ -72,8 +71,26 @@ class CommandController extends Controller
         }
     }
 
+    public function start($id)
+    {
+        try {
+            return Command::where('sector_id', $id)
+                ->whereNull('parent_id')
+                ->with('replies', 'sector')
+                ->get();
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
     public function update(Request $request, $id)
     {
+        $user = Auth::user();
+        $sector = $user->sector_id;
+        $isBot = $user->is_bot;
+        
         try {
             $command = Command::findOrFail($id);
 
@@ -84,7 +101,7 @@ class CommandController extends Controller
             if ($command) {
                 $command->name = $request->input('name');
                 $command->return = $request->input('return');
-                $command->sector_id = $this->sector;
+                $command->sector_id = $sector;
                 $command->parent_id = $request->input('parent_id');
 
                 $command->save();

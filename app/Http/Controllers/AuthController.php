@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Cookie;
 
 class AuthController extends Controller
 {
+    public function auth()
+    {
+        return Auth::user();
+    }
+
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
