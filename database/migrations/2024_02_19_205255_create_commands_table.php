@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('commands', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('return');
+            $table->text('return')->nullable();
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->foreign('parent_id')->references('id')->on('commands')->onDelete('cascade');
             $table->foreignId('sector_id')->constrained('sectors');
