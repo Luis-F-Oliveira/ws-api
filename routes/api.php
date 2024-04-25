@@ -26,11 +26,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('auth', [AuthController::class, 'auth']);
     Route::post('register', [AuthController::class, 'register']);
     Route::post('logout', [AuthController::class, 'logout']);
+
     Route::apiResource('users', UserController::class);
+
     Route::apiResource('commands', CommandController::class);
     Route::get('commands/start/{id}', [CommandController::class, 'start']);
+
     Route::apiResource('commits', CommitController::class);
-    Route::get('commits/answered/{id}', [CommitController::class, 'updateAnswered']);
+
     Route::apiResource('sectors', SectorController::class);
+    
     Route::get('charts/sectors', [ChartController::class, 'sectors']);
 });

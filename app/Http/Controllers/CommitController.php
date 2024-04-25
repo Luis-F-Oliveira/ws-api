@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Command;
+use Exception;
 use App\Models\Commit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,119 +12,47 @@ class CommitController extends Controller
     public function index()
     {
         try {
-            $user = Auth::user();
-            
-            return Commit::orderBy('id', 'desc')
-                ->with('user', 'command')
-                ->where('user_id', $user->id)
+            return Commit::with('user', 'command', 'sector')
                 ->get();
         } catch (Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()
-            ]);
+            ], 500);
         }
     }
 
     public function store(Request $request)
     {
         try {
-            $user = $request->input('user');
-            $command = $request->input('command');
+            $params = $request->all();
 
-            if (User::find($user)) {
-                return Commit::create([
-                    'user_id' => $user,
-                    'command_id' => $command,
-                    'question' => $request->input('question'),
-                    'number_from' => $request->input('number'),
-                    'answered' => false
-                ]);
-            }
-            return response()->json([
-                'message' => 'Usuário e/ou comando não existente'
-            ], 401);
+            return Commit::create($params);
         } catch (Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()
-            ]);
+            ], 500);
         }
     }
 
-    public function show($id)
+    public function show(string $id)
     {
         try {
-            return Commit::with('user', 'command')->find($id);
+            return Commit::with('user', 'command', 'sector')
+                ->find($id);
         } catch (Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()
-            ]);
+            ], 500);
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
-        try {
-            $commit = Commit::find($id);
-
-            if ($commit) {
-                $commit->user_id = $request->input('user');
-                $commit->command_id = $request->input('command');
-                $commit->number_from = $request->input('number');
-
-                $commit->save();
-
-                return response()->json([
-                    'message' => 'Commit Updated'
-                ], 200);
-            }
-            
-            return response()->json([
-                'message' => 'Commit Not Found'
-            ], 401);
-        } catch (Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ]);
-        }
+        //
     }
 
-    public function destroy($id)
+    public function destroy(string $id)
     {
-        try {
-            $commit = Commit::findOrFail($id);
-
-            $commit->delete();
-
-            return response()->json([
-                'message' => 'Commit Deleted'
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ]);
-        }
-    }
-
-    public function updateAnswered($id)
-    {
-        try {
-            $commit = Commit::findOrFail($id);
-
-            if (!$commit->answered) {
-                $commit->answered = true;
-                $commit->save();
-                return response()->json([
-                    'message' => 'Answered Update Success'
-                ], 200);
-            }
-
-            return response()->json([
-                'message' => 'Commit Already Answered'
-            ], 401);
-        } catch (Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ]);
-        }
+        //
     }
 }

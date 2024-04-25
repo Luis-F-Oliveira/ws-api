@@ -19,16 +19,6 @@ class CommitFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'user_id' => function () {
-                return User::pluck('id')->random();
-            },
-            'command_id' => function () {
-                return Command::pluck('id')->random();
-            },
-            'question' => Str::random(100),
-            'number_from' => '5565999999999',
-            'answered' => false
-        ];
+        return [];
     }
 }
