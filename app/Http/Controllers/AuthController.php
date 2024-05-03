@@ -18,6 +18,16 @@ class AuthController extends Controller
         return Auth::user();
     }
 
+    public function access()
+    {
+        $user = Auth::user();
+        $access = Access::find($user->access_id);
+
+        return response()->json([
+            'access' => $access->name
+        ], 200);
+    }
+
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
@@ -45,8 +55,7 @@ class AuthController extends Controller
             return response()->json([
                 'permanent' => $permanent,
                 'token' => $token,
-                'user' => Auth::user(),
-                'access' => $access
+                'user' => Auth::user()
             ])->withCookie($cookie);
         }
 
